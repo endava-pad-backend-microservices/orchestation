@@ -18,11 +18,11 @@ services:
      build: ../auth/
      depends_on:
        - pad_b_registry
-       - pad_b_mongodb
+       - pad_b_mongodb_auth
      ports:
          - '8082:8082'
          
-  pad_b_mongodb:
+  pad_b_mongodb_auth:
      image: mongo:latest
      environment:
           - MONGODB_USER="root" 
