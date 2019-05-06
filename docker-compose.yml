@@ -14,20 +14,21 @@ services:
          - '8761:8761'
          
          
-  pad-b-auth:
-     build: ../auth/
-     depends_on:
-       - pad-b-registry
-       - pad-b-mongodb-auth
-     ports:
-         - '8082:8082'
-         
-  pad-b-mongodb-auth:
-     image: mongo:latest
-     environment:
-          - MONGODB_USER="root" 
-          - MONGODB_PASS="root"
-     ports:
-            - 27017:27017 
+#  pad-b-auth:
+#     build: ../auth/
+#     depends_on:
+#       - pad-b-registry
+#       - pad-b-mongodb-auth
+#     ports:
+#         - '8082:8082'
+#         
+#  pad-b-mongodb-auth:
+#     image: mongo:latest
+#     environment:
+#          - MONGODB_USER="root" 
+#          - MONGODB_PASS="root"
+#          - MONGODB_DATABASE="auth"
+#     ports:
+#            - 27017:27017
          
     
