@@ -28,6 +28,6 @@ services:
           - MONGODB_USER="root" 
           - MONGODB_PASS="root"
      ports:
-            - 27017:27017
+            - 27017:27017 
          
     
