@@ -38,24 +38,28 @@ services:
           POSTGRES_DB: users 
           POSTGRES_USER: users 
           POSTGRES_PASSWORD: secure123
-    	
-    
-         
-         
+          
   pad-b-auth:
      build: ../auth/
      depends_on:
        - pad-b-registry
-       - pad-b-mongodb-auth
+       - pad-b-auth-database
      ports:
          - '8082:8082'
+     environment:
+          - SERVER_URL=pad-b-auth
+          - EUREKA_URL=pad-b-registry
+          - MONGO_DB=auth
+          - MONGO_USER=admin
+          - MONGO_PASSWORD=123456
+          - MONGO_URL=pad-b-auth-database
         
-  pad-b-mongodb-auth:
+  pad-b-auth-database:
      image: mongo:latest
      environment:
-          - MONGODB_USER="root" 
-          - MONGODB_PASS="root"
-          - MONGODB_DATABASE="auth"
+          - MONGO_INITDB_ROOT_USERNAME=admin
+          - MONGO_INITDB_ROOT_PASSWORD=123456
+          - MONGO_INITDB_DATABASE=auth
      ports:
             - 27017:27017
          
