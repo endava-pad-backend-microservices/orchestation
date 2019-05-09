@@ -12,7 +12,7 @@ services:
      build: ../registry/
      ports:
          - '8761:8761'
-         
+
   pad-b-users:
     build:  ../user/
     depends_on:
@@ -29,6 +29,7 @@ services:
           - POSTGRES_PASSWORD=secure123
           - POSTGRES_HOSTNAME=pad-b-users-database
          
+
   pad-b-users-database:
       image: postgres
       restart: always
@@ -63,4 +64,5 @@ services:
      ports:
             - 27017:27017
          
+
     
