@@ -13,16 +13,33 @@ services:
      ports:
          - '8761:8761'
          
-   pad-b-users:
+  pad-b-users:
     build:  ../user/
     depends_on:
       - pad-b-registry
       - pad-b-gateway
+      - pad-b-users-database
     ports:
         - '8084:8084'
     environment:
           - SERVER_URL=pad-b-users
           - EUREKA_URL=pad-b-registry
+          - POSTGRES_DB=users
+          - POSTGRES_USER=users
+          - POSTGRES_PASSWORD=secure123
+          - POSTGRES_HOSTNAME=pad-b-users-database
+         
+  pad-b-users-database:
+      image: postgres
+      restart: always
+      ports:
+          - '5432:5432'
+      environment: 
+          POSTGRES_DB: users 
+          POSTGRES_USER: users 
+          POSTGRES_PASSWORD: secure123
+    	
+    
          
          
   pad-b-auth:
