@@ -7,11 +7,15 @@ services:
       - pad-b-registry
     ports:
         - '8080:8080'
+    env_file: 
+        - ./gateway/local.env
       
   pad-b-registry: 
      build: ../registry/
      ports:
          - '8761:8761'
+     env_file:
+      - ./registry/local.env
 
   pad-b-users:
     build:  ../user/
@@ -21,13 +25,8 @@ services:
       - pad-b-users-database
     ports:
         - '8084:8084'
-    environment:
-          - SERVER_URL=pad-b-users
-          - EUREKA_URL=pad-b-registry
-          - POSTGRES_DB=users
-          - POSTGRES_USER=users
-          - POSTGRES_PASSWORD=secure123
-          - POSTGRES_HOSTNAME=pad-b-users-database
+    env_file: 
+        - ./users/local.env
          
 
   pad-b-users-database:
@@ -47,20 +46,15 @@ services:
        - pad-b-auth-database
      ports:
          - '8082:8082'
-     environment:
-          - SERVER_URL=pad-b-auth
-          - EUREKA_URL=pad-b-registry
-          - MONGO_DB=auth
-          - MONGO_USER=admin
-          - MONGO_PASSWORD=123456
-          - MONGO_URL=pad-b-auth-database
+     env_file: 
+        - ./auth/local.env
         
   pad-b-auth-database:
      image: mongo:latest
      environment:
           - MONGO_INITDB_ROOT_USERNAME=admin
           - MONGO_INITDB_ROOT_PASSWORD=123456
-          - MONGO_INITDB_DATABASE=auth
+          - MONGO_INITDB_DATABASE=admin
      ports:
             - 27017:27017
          
