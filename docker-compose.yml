@@ -57,6 +57,26 @@ services:
           - MONGO_INITDB_DATABASE=admin
      ports:
             - 27017:27017
+
+  pad-b-config: 
+     build: ../config/
+     depends_on:
+       - pad-b-registry
+       - pad-b-config-database
+     ports:
+         - '8086:8086'
+     env_file: 
+        - ./config/local.env
+        
+  pad-b-config-database:
+     image: mongo:latest
+     command: mongod --port 27018
+     environment:
+          - MONGO_INITDB_ROOT_USERNAME=admin
+          - MONGO_INITDB_ROOT_PASSWORD=123456
+          - MONGO_INITDB_DATABASE=admin
+     ports:
+            - 27018:27018
          
 
     
