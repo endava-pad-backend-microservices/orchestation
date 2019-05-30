@@ -77,6 +77,32 @@ services:
           - MONGO_INITDB_DATABASE=admin
      ports:
             - 27018:27018
+
+            
+  pad-b-audit: 
+     build: ../audit/Audit/.
+     restart: always
+     depends_on:
+       - pad-b-audit-database
+       - pad-b-registry
+       - pad-b-gateway
+     ports:
+         - '8087:8087'
+     env_file: 
+        - ./audit/local.env
+     environment:
+        - ASPNETCORE_ENVIRONMENT=Production
+        
+  pad-b-audit-database:
+     image: couchdb:latest
+     restart: always
+     command:
+        -docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=123456 -p 5986 -d couchdb
+     env_file: 
+        - ./audit/local.env
+     ports:
+        - 5986:5986           
+            
          
 
     
