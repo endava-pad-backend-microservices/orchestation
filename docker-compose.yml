@@ -90,19 +90,15 @@ services:
          - '8087:8087'
      env_file: 
         - ./audit/local.env
-     environment:
-        - ASPNETCORE_ENVIRONMENT=Production
         
   pad-b-audit-database:
      image: couchdb:latest
      restart: always
-     command:
-        -docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=123456 -p 5986 -d couchdb
-     env_file: 
-        - ./audit/local.env
+     environment:
+        - COUCHDB_PASSWORD=123456
+        - COUCHDB_USER=admin
      ports:
-        - 5986:5986           
-            
+        - 5986:5986                
          
 
     
