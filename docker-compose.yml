@@ -77,6 +77,28 @@ services:
           - MONGO_INITDB_DATABASE=admin
      ports:
             - 27018:27018
+
+            
+  pad-b-audit: 
+     build: ../audit/Audit/.
+     restart: always
+     depends_on:
+       - pad-b-audit-database
+       - pad-b-registry
+       - pad-b-gateway
+     ports:
+         - '8087:8087'
+     env_file: 
+        - ./audit/local.env
+        
+  pad-b-audit-database:
+     image: couchdb:latest
+     restart: always
+     environment:
+        - COUCHDB_PASSWORD=123456
+        - COUCHDB_USER=admin
+     ports:
+        - 5986:5986                
          
 
     
