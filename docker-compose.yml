@@ -5,10 +5,12 @@ services:
     build: ../gateway/   
     depends_on:
       - pad-b-registry
+      - pad-b-config
     ports:
         - '8080:8080'
     env_file: 
         - ./gateway/local.env
+    restart: on-failure
       
   pad-b-registry: 
      build: ../registry/
@@ -44,10 +46,12 @@ services:
      depends_on:
        - pad-b-registry
        - pad-b-auth-database
+       - pad-b-config
      ports:
          - '8082:8082'
      env_file: 
         - ./auth/local.env
+     restart: on-failure
         
   pad-b-auth-database:
      image: mongo:latest
