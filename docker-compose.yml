@@ -30,7 +30,6 @@ services:
     env_file: 
         - ./users/local.env
          
-
   pad-b-users-database:
       image: postgres
       restart: always
@@ -90,6 +89,7 @@ services:
        - pad-b-audit-database
        - pad-b-registry
        - pad-b-gateway
+       - pad-b-config
      ports:
          - '8087:8087'
      env_file: 
@@ -102,7 +102,7 @@ services:
         - COUCHDB_PASSWORD=123456
         - COUCHDB_USER=admin
      ports:
-        - 5986:5986                
+        - 5986:5986       
          
 
     
