@@ -102,7 +102,16 @@ services:
         - COUCHDB_PASSWORD=123456
         - COUCHDB_USER=admin
      ports:
-        - 5986:5986       
-         
+        - 5986:5986   
+        
+  pad-b-tracing: 
+     restart: on-failure
+     build: ../tracing/
+     depends_on:
+       - pad-b-registry
+     ports:
+         - '8090:8090'
+     env_file: 
+        - ./tracing/local.env
 
     
