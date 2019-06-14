@@ -103,10 +103,21 @@ services:
         - COUCHDB_USER=admin
      ports:
         - 5986:5986       
-         
+
+  pad-b-tracing: 
+     restart: on-failure
+     build: ../tracing/
+     depends_on:
+       - pad-b-registry
+     ports:
+         - '8090:8090'
+     env_file: 
+        - ./tracing/local.env
+                 
   pad-b-rabbit:
     image: "rabbitmq:3-management"
     hostname: "rabbit"
+    restart: on-failure
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -114,4 +125,3 @@ services:
       NAME: "rabbitmq"
     volumes:
       - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
-  
