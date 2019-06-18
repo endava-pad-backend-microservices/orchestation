@@ -102,8 +102,8 @@ services:
         - COUCHDB_PASSWORD=123456
         - COUCHDB_USER=admin
      ports:
-        - 5986:5986   
-        
+        - 5986:5986       
+
   pad-b-tracing: 
      restart: on-failure
      build: ../tracing/
@@ -113,5 +113,14 @@ services:
          - '8090:8090'
      env_file: 
         - ./tracing/local.env
-
-    
+                 
+  pad-b-rabbit:
+     image: rabbitmq:3-management-alpine
+     hostname: rabbit
+     restart: on-failure
+     ports:
+       - 15672:15672
+       - 5672:5672
+     environment :
+       - RABBITMQ_DEFAULT_USER=admin
+       - RABBITMQ_DEFAULT_PASS=pa$w0Rd
