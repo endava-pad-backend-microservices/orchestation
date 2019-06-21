@@ -123,4 +123,12 @@ services:
        - 5672:5672
      environment :
        - RABBITMQ_DEFAULT_USER=admin
-       - RABBITMQ_DEFAULT_PASS=pa$w0Rd
+       - RABBITMQ_DEFAULT_PASS=admin
+       
+  pad-b-notification:
+     build: ../notification/.
+     ports:
+        - '8089:8089'
+     env_file:
+       - ./notification/local.env
+     restart: on-failure
