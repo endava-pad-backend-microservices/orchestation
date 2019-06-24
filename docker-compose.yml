@@ -121,9 +121,10 @@ services:
      ports:
        - 15672:15672
        - 5672:5672
-     environment :
-       - RABBITMQ_DEFAULT_USER=admin
-       - RABBITMQ_DEFAULT_PASS=admin
+     volumes:
+        - rabbitmq:/var/lib/rabbitmq:rw
+        - ./rabbit/definitions.json:/opt/definitions.json:ro
+        - ./rabbit/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
        
   pad-b-notification:
      build: ../notification/.
@@ -132,3 +133,6 @@ services:
      env_file:
        - ./notification/local.env
      restart: on-failure
+     
+volumes:
+    rabbitmq:
