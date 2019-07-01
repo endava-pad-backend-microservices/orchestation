@@ -11,6 +11,9 @@ services:
     env_file: 
         - ./gateway/local.env
     restart: on-failure
+    links:
+      - pad-b-registry
+      - pad-b-config
       
   pad-b-registry: 
      build: ../registry/
@@ -18,6 +21,11 @@ services:
          - '8761:8761'
      env_file:
       - ./registry/local.env
+     links: 
+      - elasticsearch
+      - kibana
+      - logstash
+      - filebeat 
 
   pad-b-users:
     build:  ../user/
@@ -70,6 +78,10 @@ services:
          - '8086:8086'
      env_file: 
         - ./config/local.env
+     links:
+       - pad-b-registry
+       - pad-b-config-database
+      
         
   pad-b-config-database:
      image: mongo:latest
@@ -94,6 +106,11 @@ services:
          - '8087:8087'
      env_file: 
         - ./audit/local.env
+     links:
+       - pad-b-audit-database
+       - pad-b-registry
+       - pad-b-gateway
+       - pad-b-config 
         
   pad-b-audit-database:
      image: couchdb:latest
@@ -133,6 +150,57 @@ services:
      env_file:
        - ./notification/local.env
      restart: on-failure
+
+  filebeat:
+     hostname: filebeat
+     build:
+      context: ../logging/filebeat
+     volumes:
+      # needed to access all docker logs (read only) :
+     - "/var/lib/docker/containers:/usr/share/dockerlogs/data:ro"
+      # needed to access additional informations about containers
+     - "/var/run/docker.sock:/var/run/docker.sock"
+     links:
+       - logstash
+       - elasticsearch
+       - kibana
+
+  kibana:
+     image: docker.elastic.co/kibana/kibana:6.5.3
+     environment:
+      - "LOGGING_QUIET=true"
+     links:
+      - elasticsearch
+     ports:
+      - 5601:5601
+
+  logstash: 
+     hostname: logstash
+     build:
+      context: ../logging/logstash
+     ports:
+      - 5044:5044
+     environment:
+      LOG_LEVEL: error
+     links:
+      - elasticsearch
+
+  elasticsearch:
+     hostname: elasticsearch
+     build:
+      context: ../logging/elasticsearch
+     environment:
+      - cluster.name=pad-b-elasticsearch-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+     ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+     ports:
+      - 9200:9200
      
 volumes:
     rabbitmq:
+
+  
