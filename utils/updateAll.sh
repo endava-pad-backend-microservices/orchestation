@@ -11,8 +11,9 @@ cd ../../
 for respository in $REPOSITORIES; 
 do 
 
- cd $respository
- pwd
- git pull
- cd ..
+    cd $respository
+    pwd
+#Checkout to master branch, fetch the code and then rebase
+    git checkout master && git fetch && git rebase origin master
+    cd ..
 done
